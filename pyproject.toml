@@ -1,0 +1,9 @@
+[project]
+name = "rodizio-closers"
+version = "0.1.0"
+description = "Rodízio (round-robin) de distribuição de leads entre closers, com checagem de agenda."
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+# garante que 'from app...' funcione rodando 'pytest' da raiz do projeto
+pythonpath = ["."]

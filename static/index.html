@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rodízio de Closers</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>🎯 Rodízio de Closers</h1>
+    <p class="subtitle">Distribuição justa de leads (round-robin) com checagem de agenda</p>
+  </header>
+
+  <main>
+    <!-- Coluna esquerda: a roleta -->
+    <section class="wheel-panel">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <div id="wheel" class="wheel"></div>
+        <button id="spin-btn" class="wheel-center">GIRAR</button>
+      </div>
+    </section>
+
+    <!-- Coluna direita: controles + resultado -->
+    <section class="side-panel">
+      <div class="card">
+        <h2>Nova call</h2>
+        <label>
+          Duração
+          <select id="duration">
+            <option value="30">30 min (rápida)</option>
+            <option value="45" selected>45 min (padrão)</option>
+            <option value="60">60 min (longa)</option>
+          </select>
+        </label>
+        <label>
+          Horário da call
+          <input type="datetime-local" id="when" value="2026-06-17T14:00" />
+        </label>
+      </div>
+
+      <div class="card" id="result-card" hidden>
+        <h2>Resultado</h2>
+        <ul id="skip-list" class="skip-list"></ul>
+        <div id="winner" class="winner"></div>
+        <p class="queue">Fila agora: <span id="queue"></span></p>
+      </div>
+
+      <div class="card">
+        <h2>Closers no fluxo</h2>
+        <p class="hint">Desligue um closer pra tirá-lo do rodízio (o "pop-up").</p>
+        <ul id="closer-list" class="closer-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
