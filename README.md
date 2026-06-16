@@ -1,4 +1,4 @@
-# 🎯 Rodízio de Closers
+# Rodízio de Closers
 
 Distribuição **justa** de leads entre vendedores (closers), com checagem de
 agenda em tempo real. Em vez de mandar o lead pro primeiro que aparece (ou
@@ -9,7 +9,7 @@ férias, explicando o porquê.
 > Projeto nascido de uma dor real de operação de vendas: como repartir leads
 > entre closers sem injustiça e sem mandar reunião pra quem não tem horário.
 
-## ✨ O que ele faz
+## Qual é a sua função?
 
 - **Rodízio justo (round-robin)** entre os closers — cada um tem a sua vez.
 - **Checa a agenda** antes de atribuir: se o closer da vez não tem horário
@@ -21,7 +21,7 @@ férias, explicando o porquê.
 - **Integração com HubSpot** para registrar a atribuição (atualmente
   mockada; ver Roadmap).
 
-## 🧠 Decisões de arquitetura (o "porquê")
+##  Decisões de arquitetura
 
 - **É round-robin, não aleatório.** Distribuição de lead precisa ser justa
   e previsível, não sorte. A "roleta girando" é só a interface; por baixo é
@@ -35,7 +35,7 @@ férias, explicando o porquê.
   `models.py`) não importam nada de web/API/banco — por isso dá pra testar
   tudo em milissegundos.
 
-## 🗂️ Estrutura
+## Estrutura
 
 ```
 app/
@@ -46,7 +46,7 @@ tests/
   test_engine.py        # testes que provam a lógica
 ```
 
-## ▶️ Como rodar
+## Como rodar
 
 ```bash
 python -m venv .venv
@@ -68,7 +68,7 @@ uvicorn app.main:app --reload
 # depois abra http://127.0.0.1:8000
 ```
 
-## 🛣️ Roadmap
+## Roadmap
 
 - [x] Motor do rodízio (round-robin) + testes
 - [x] API REST com FastAPI (atribuir / ligar-desligar)
