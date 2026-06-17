@@ -10,6 +10,7 @@ const PALETTE = [
   "#1abc9c", "#16a085", "#f39c12", "#c0392b",
 ];
 
+const sourceBadge = document.getElementById("source-badge");
 const wheel = document.getElementById("wheel");
 const spinBtn = document.getElementById("spin-btn");
 const closerList = document.getElementById("closer-list");
@@ -131,18 +132,17 @@ function showResult(data) {
   skipList.innerHTML = "";
   data.skipped.forEach((s, i) => {
     const li = document.createElement("li");
-    const icon = s.on_vacation ? "🏖️" : "⏭️";
-    li.innerHTML = `${icon} Pulou <b>${s.name}</b> — ${s.reason}`;
+    li.innerHTML = `Pulou <b>${s.name}</b> — ${s.reason}`;
     li.style.animationDelay = `${i * 0.12}s`;
     skipList.appendChild(li);
   });
 
   if (data.chosen) {
     winnerEl.className = "winner";
-    winnerEl.textContent = `✅ Lead vai para: ${data.chosen.name}`;
+    winnerEl.textContent = `Lead vai para: ${data.chosen.name}`;
   } else {
     winnerEl.className = "winner none";
-    winnerEl.textContent = "❌ Ninguém disponível nesse horário.";
+    winnerEl.textContent = "Ninguém disponível nesse horário.";
   }
 
   queueEl.textContent = data.queue.join(" → ");
@@ -153,5 +153,17 @@ function showResult(data) {
   drawCloserList(); // reabilita os switches
 }
 
+async function loadSource() {
+  const res = await fetch("/api/source");
+  const { provider } = await res.json();
+  if (provider === "google") {
+    sourceBadge.textContent = "Agenda: Google Calendar";
+    sourceBadge.classList.add("live");
+  } else {
+    sourceBadge.textContent = "Agenda: simulada (mock)";
+  }
+}
+
 spinBtn.addEventListener("click", spin);
 loadClosers();
+loadSource();

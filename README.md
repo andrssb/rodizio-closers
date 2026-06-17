@@ -21,7 +21,7 @@ férias, explicando o porquê.
 - **Integração com HubSpot** para registrar a atribuição (atualmente
   mockada; ver Roadmap).
 
-##  Decisões de arquitetura
+## Decisões de arquitetura
 
 - **É round-robin, não aleatório.** Distribuição de lead precisa ser justa
   e previsível, não sorte. A "roleta girando" é só a interface; por baixo é
@@ -68,15 +68,47 @@ uvicorn app.main:app --reload
 # depois abra http://127.0.0.1:8000
 ```
 
+## Extensão opcional: agenda real via Google Calendar
+
+**Isto é opcional — o app funciona 100% sem nada disso.** Por padrão ele usa
+uma **agenda simulada (mock)**, que já demonstra toda a lógica do rodízio.
+
+O conector real do Google (`app/google_calendar.py`) já está pronto e
+encaixado no sistema, com fallback automático: ele só é usado se você
+fornecer as credenciais abaixo. É um ponto de extensão, não um requisito.
+
+Para quem quiser ligar a agenda **real** do Google Calendar um dia:
+
+1. Acesse o [Google Cloud Console](https://console.cloud.google.com/) e crie
+   um projeto (ou use um existente).
+2. Em **APIs e Serviços > Biblioteca**, habilite a **Google Calendar API**.
+3. Em **APIs e Serviços > Tela de consentimento OAuth**, configure como
+   *Externo* e adicione seu e-mail como usuário de teste.
+4. Em **APIs e Serviços > Credenciais > Criar credenciais > ID do cliente
+   OAuth**, escolha o tipo **App para computador**. Baixe o JSON e salve na
+   raiz do projeto como **`credentials.json`**.
+5. Pegue o ID de cada calendário (Google Agenda > Configurações do calendário
+   > *Integrar agenda* > **ID da agenda**; geralmente é o e-mail) e preencha
+   o dicionário `CALENDAR_IDS` em `app/main.py`, mapeando `closer.id -> ID`.
+6. Rode `uvicorn app.main:app --reload`. Na primeira vez abre o navegador pra
+   você autorizar; depois disso fica salvo em `token.json`.
+
+> Dica pra demo: você não precisa de 12 contas. Crie alguns calendários
+> secundários na sua própria Google Agenda (Adicionar > Criar nova agenda),
+> coloque eventos de teste e mapeie só esses closers. Os demais ficam livres.
+>
+> `credentials.json` e `token.json` são segredos e já estão no `.gitignore`.
+
 ## Roadmap
 
 - [x] Motor do rodízio (round-robin) + testes
 - [x] API REST com FastAPI (atribuir / ligar-desligar)
 - [x] Front com a roleta animada
-- [ ] Agenda real via Google Calendar (`GoogleCalendarProvider`)
+- [x] Estrutura plugável de agenda (mock + conector Google com fallback)
+- [ ] Conectar o Google Calendar de verdade (opcional — requer credenciais)
 - [ ] Integração real com HubSpot
 - [ ] Persistência em banco (SQLAlchemy)
 
-## 🧪 Stack
+## Stack
 
 Python · FastAPI · SQLAlchemy · pytest · (Google Calendar API · HubSpot)

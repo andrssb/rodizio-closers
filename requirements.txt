@@ -6,7 +6,7 @@ sqlalchemy
 # Testes
 pytest
 
-# Google Calendar (entram quando a gente plugar a agenda real)
-# google-api-python-client
-# google-auth
-# google-auth-oauthlib
+# Google Calendar (agenda real)
+google-api-python-client
+google-auth
+google-auth-oauthlib

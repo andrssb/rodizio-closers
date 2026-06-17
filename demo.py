@@ -38,19 +38,19 @@ engine = RoundRobinEngine(closers, FakeCalendarProvider(events=eventos, vacation
 
 def girar(titulo, quando, duracao):
     print(f"\n{'=' * 60}")
-    print(f"🎯 {titulo}  (call de {duracao} min às {quando.strftime('%H:%M')})")
+    print(f"{titulo}  (call de {duracao} min às {quando.strftime('%H:%M')})")
     print("=" * 60)
     r = engine.assign(quando, duracao)
 
     for s in r.skipped:
-        print(f"   ⏭️  Pulou {s.closer.name:<10} -> {s.availability.reason}")
+        print(f"   - Pulou {s.closer.name:<10} -> {s.availability.reason}")
 
     if r.assigned:
-        print(f"   ✅ LEAD VAI PARA: {r.chosen.name}")
+        print(f"   >> LEAD VAI PARA: {r.chosen.name}")
     else:
-        print("   ❌ Ninguém disponível nesse horário.")
+        print("   >> Ninguém disponível nesse horário.")
 
-    print(f"   📋 Fila agora: {' → '.join(engine.queue_order)}")
+    print(f"   Fila agora: {' -> '.join(engine.queue_order)}")
 
 
 # ---------------------------------------------------------------------------

@@ -9,6 +9,7 @@ Depois abra:  http://127.0.0.1:8000
 
 from __future__ import annotations
 
+import os
 from datetime import date, datetime
 from pathlib import Path
 
@@ -43,7 +44,41 @@ FERIAS = [
     FakeVacation(3, date(2026, 6, 15), date(2026, 6, 20)),  # Carla
 ]
 
-engine = RoundRobinEngine(CLOSERS, FakeCalendarProvider(events=EVENTOS, vacations=FERIAS))
+# ---------------------------------------------------------------------------
+# Mapeamento closer -> calendário do Google.
+# Preencha com o ID de cada calendário (normalmente o e-mail). Closers que
+# ficarem de fora são tratados como sempre livres. Veja o README pra como
+# obter esses IDs e criar o credentials.json.
+# ---------------------------------------------------------------------------
+CALENDAR_IDS: dict[int, str] = {
+    # 1: "ana.closer@gmail.com",
+    # 2: "xyz123@group.calendar.google.com",
+}
+
+
+def build_provider():
+    """Escolhe a fonte de agenda: Google real se estiver configurado, senão mock.
+
+    Regra: só usa o Google se existir o credentials.json E houver pelo menos um
+    closer mapeado em CALENDAR_IDS. Qualquer falha cai no mock — o app nunca
+    quebra por causa da integração.
+    """
+    if os.path.exists("credentials.json") and CALENDAR_IDS:
+        try:
+            from .google_calendar import GoogleCalendarProvider, get_google_service
+
+            service = get_google_service()
+            print("[agenda] Usando Google Calendar real.")
+            return GoogleCalendarProvider(service, CALENDAR_IDS)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[agenda] Falha ao conectar no Google ({exc}); caindo no mock.")
+    else:
+        print("[agenda] Usando agenda simulada (mock).")
+
+    return FakeCalendarProvider(events=EVENTOS, vacations=FERIAS)
+
+
+engine = RoundRobinEngine(CLOSERS, build_provider())
 
 # ---------------------------------------------------------------------------
 # App + arquivos estáticos (o frontend)
@@ -63,6 +98,13 @@ def index():
 # ---------------------------------------------------------------------------
 # Endpoints da API
 # ---------------------------------------------------------------------------
+@app.get("/api/source")
+def source():
+    """Diz qual fonte de agenda está ativa (pra mostrar na interface)."""
+    name = type(engine.provider).__name__
+    return {"provider": "google" if "Google" in name else "mock"}
+
+
 @app.get("/api/closers")
 def list_closers():
     """Lista os 12 closers na ordem fixa (pra desenhar a roleta)."""
