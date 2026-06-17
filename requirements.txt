@@ -1,12 +1,12 @@
-# Núcleo da API (entram na próxima etapa)
+# Núcleo da API
 fastapi
 uvicorn[standard]
-sqlalchemy
 
 # Testes
 pytest
 
-# Google Calendar (agenda real)
-google-api-python-client
-google-auth
-google-auth-oauthlib
+# Google Calendar (opcional — só precisa se for ligar a agenda real).
+# Para usar, descomente as três linhas abaixo:
+# google-api-python-client
+# google-auth
+# google-auth-oauthlib

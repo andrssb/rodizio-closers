@@ -1,0 +1,9 @@
+# Configuração de deploy no Render (https://render.com).
+# Diz como instalar e como rodar o app, e em qual porta escutar.
+services:
+  - type: web
+    name: rodizio-closers
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT

@@ -1,5 +1,9 @@
 # Rodízio de Closers
 
+**[Acessar o demo ao vivo](https://rodizio-closers.onrender.com)** — app
+publicado e funcionando (no plano gratuito, o primeiro acesso pode levar uns
+30 segundos pra "acordar").
+
 Distribuição **justa** de leads entre vendedores (closers), com checagem de
 agenda em tempo real. Em vez de mandar o lead pro primeiro que aparece (ou
 pior, sempre pro mesmo), o sistema usa um rodízio (**round-robin**) que
